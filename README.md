@@ -35,11 +35,7 @@ docker-compose up -d
 
 La base de datos se encuentra en un contenedor de Docker, por lo que no es necesario instalarla en el equipo local.
 
-Para poder generar el usuario de prueba, se debe ejecutar el siguiente script:
-
-```bash
-npm run prisma:seed
-```
+> **Nota:** Es posible que el servicio de api no esté disponible inmediatamente, por lo que se debe esperar unos segundos para que se levante el servicio.
 
 ## Uso
 
