@@ -71,3 +71,13 @@ Las credenciales de acceso son, como especifica el enunciado del ejercicio:
 
 - Usuario: `s2credit`
 - Contraseña: `s2creditJosé`
+
+## Demostración
+
+### Frontend
+
+![Frontend](./images/frontend-screenshot.png)
+
+### Backend
+
+![Backend](./images/backend-screenshot.png)
