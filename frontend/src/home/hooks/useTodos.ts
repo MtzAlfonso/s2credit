@@ -2,6 +2,7 @@ import axios, { AxiosHeaders, AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
+import { environments } from '../../shared/constants';
 import { ITodo } from '../interfaces';
 
 function generateHeaders() {
@@ -20,20 +21,20 @@ export const useTodos = () => {
   const jpTodosQuery = useQuery<AxiosResponse<ITodo[]>>(
     'jsonplaceholder-todos',
     () => {
-      return axios.get('https://jsonplaceholder.typicode.com/todos');
+      return axios.get(`${environments.API_URL}/todos`);
     }
   );
 
   const apiTodosQuery = useQuery<AxiosResponse<ITodo[]>>('api-todos', () => {
     const headers = generateHeaders();
-    return axios.get('http://localhost:4000/api/todos', { headers });
+    return axios.get(`${environments.BACKEND_URL}/todos`, { headers });
   });
 
   const updateTodoMutation = useMutation<AxiosResponse<ITodo>, Error, ITodo>(
     (todo) => {
       const headers = generateHeaders();
       return axios.patch(
-        `http://localhost:4000/api/todos/${todo.id}`,
+        `${environments.BACKEND_URL}/todos/${todo.id}`,
         {
           id: +todo.id,
           userId: +todo.userId,
@@ -51,7 +52,7 @@ export const useTodos = () => {
     (todo) => {
       const headers = generateHeaders();
       return axios.post(
-        `http://localhost:4000/api/todos`,
+        `${environments.BACKEND_URL}/todos`,
         {
           id: +todo.id,
           userId: +todo.userId,
@@ -75,7 +76,7 @@ export const useTodos = () => {
   >((todo) => {
     const headers = generateHeaders();
     return axios.post(
-      `http://localhost:4000/api/todos/restore/${todo.id}`,
+      `${environments.BACKEND_URL}/todos/restore/${todo.id}`,
       {
         historyId: todo.historyId,
       },
@@ -151,7 +152,13 @@ export const useTodos = () => {
         if (ownTodo) return { ...externalTodo, ...ownTodo };
         return externalTodo;
       });
-      setTodos([...mergedTodos, ...ownTodos]);
+      const allTodos = [...mergedTodos, ...ownTodos]
+        .sort((a, b) => a.id - b.id)
+        .filter(
+          (todo, index, self) =>
+            index === self.findIndex((t) => t.id === todo.id)
+        );
+      setTodos(allTodos);
       setIsMerging(false);
     }
   }, [externalTodos, ownTodos]);

@@ -28,6 +28,7 @@ export const TodoItem: FC<PropsWithChildren<TodoItemProps>> = ({
 
   return (
     <>
+      {/* <pre>{JSON.stringify(todo, null, 2)}</pre> */}
       <Badge.Ribbon
         text={todo.completed ? 'Completed' : 'Pending'}
         color={todo.completed ? 'green' : 'blue'}

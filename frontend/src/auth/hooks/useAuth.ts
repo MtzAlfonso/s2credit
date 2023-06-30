@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 
 import { AuthStatus, ILoginResponse, IUser } from '../../auth/interfaces';
+import { environments } from '../../shared/constants';
 
 interface ILoginArgs {
   username: string;
@@ -20,7 +21,7 @@ export const useAuth = () => {
     Error,
     ILoginArgs
   >(({ username, password }) => {
-    return axios.post('http://localhost:4000/api/auth/login', {
+    return axios.post(`${environments.BACKEND_URL}/auth/login`, {
       username,
       password,
     });
@@ -34,7 +35,7 @@ export const useAuth = () => {
     const token = localStorage.getItem('token');
     const headers = new AxiosHeaders().set('Authorization', `Bearer ${token}`);
 
-    return axios.post('http://localhost:4000/api/auth/revalidate', null, {
+    return axios.post(`${environments.BACKEND_URL}/auth/revalidate`, null, {
       headers,
     });
   });
