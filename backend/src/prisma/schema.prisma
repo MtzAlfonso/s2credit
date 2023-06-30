@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String?
+  username  String  @unique
+  password  String
+  isActive  Boolean @default(true)
+  roles     Role[]  @default([USER])
+}
+
+model Todo {
+  id               Int       @id @unique
+  userId           Int
+  title            String
+  completed        Boolean   @default(false)
+  deleted          Boolean   @default(false)
+  updated          Boolean   @default(false)
+  currentHistoryId String?
+  History          History[]
+}
+
+model History {
+  historyId String   @id @default(uuid())
+  id        Int
+  userId    Int
+  title     String
+  completed Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Todo      Todo?    @relation(fields: [id], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
